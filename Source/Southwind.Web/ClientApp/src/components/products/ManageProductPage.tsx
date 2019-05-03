@@ -4,8 +4,8 @@ import Spinner from "../common/Spinner/Spinner";
 import { toast } from "react-toastify";
 import { CategoryService } from "../../services/categoryService";
 import { ProductService } from "../../services/productService";
-import { Product } from "../../product";
-import { Category } from "../../category";
+import { Product } from "../../entities/product";
+import { Category } from "../../entities/category";
 
 type propsType = {
   match: any;

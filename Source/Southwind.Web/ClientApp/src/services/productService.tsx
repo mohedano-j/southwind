@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Observable } from "rxjs";
-import { Product } from "../product";
+import { Product } from "../entities/product";
 const baseUrl = process.env.API_URL + "/products/";
 
 export class ProductService {
@@ -80,4 +80,4 @@ export class ProductService {
   }
 }
 
-export default new ProductService();
+export default ProductService;

@@ -34,7 +34,7 @@ export default class NavMenu extends React.Component<{}, { isOpen: boolean }> {
         >
           <Container>
             <NavbarBrand tag={Link} to="/">
-              Eastwind.Web
+              Southwind.Web
             </NavbarBrand>
             <NavbarToggler onClick={this.toggle} className="mr-2" />
             <Collapse

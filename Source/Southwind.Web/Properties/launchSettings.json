@@ -15,10 +15,10 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Eastwind.Web": {
+    "Southwind.Web": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:5001;http://localhost:5000",
+      "applicationUrl": "https://localhost:1302;http://localhost:1301",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

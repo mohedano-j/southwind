@@ -5,8 +5,8 @@ import Spinner from "../common/Spinner/Spinner";
 import { toast } from "react-toastify";
 import { CategoryService } from "../../services/categoryService";
 import { ProductService } from "../../services/productService";
-import { Category } from "../../category";
-import { Product } from "../../product";
+import { Category } from "../../entities/category";
+import { Product } from "../../entities/product";
 import { orderBy } from "lodash";
 
 type propsType = {};
@@ -98,7 +98,7 @@ class ProductsPage extends React.Component<propsType, stateType> {
       }
 
       const newProducts = products.filter(
-        (p: Product) => p.productId == product.productId
+        (p: Product) => p.productId !== product.productId
       );
       this.setState({ products: newProducts });
       toast.success("Product deleted");

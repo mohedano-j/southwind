@@ -1,8 +1,8 @@
 import React from "react";
 import TextInput from "../common/Form/TextInput";
 import SelectInput from "../common/Form/SelectInput";
-import { Product } from "../../product";
-import { Category } from "../../category";
+import { Product } from "../../entities/product";
+import { Category } from "../../entities/category";
 
 type propsType = {
   product: Product;

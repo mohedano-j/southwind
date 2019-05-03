@@ -2,4 +2,4 @@
 
 ## Overview
 
-Southwind is a sample React application using MobX running on ASP.NET core.
+Southwind is a sample React application using observable services (RxJS) on ASP.NET core.

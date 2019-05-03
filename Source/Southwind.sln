@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.539
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eastwind.Web", "Eastwind.Web\Eastwind.Web.csproj", "{E4D22204-BF5A-4A94-B495-585DD9D84273}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Southwind.Web", "Southwind.Web\Southwind.Web.csproj", "{E4D22204-BF5A-4A94-B495-585DD9D84273}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{193C7B5A-3BFC-4313-AB75-959F8EA5B04B}"
 	ProjectSection(SolutionItems) = preProject

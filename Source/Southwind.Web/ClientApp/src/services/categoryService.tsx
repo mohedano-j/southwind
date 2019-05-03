@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Observable } from "rxjs";
-import { Category } from "../category";
+import { Category } from "../entities/category";
 const baseUrl = process.env.API_URL + "/categories/";
 
 export class CategoryService {
@@ -20,4 +20,4 @@ export class CategoryService {
   }
 }
 
-export default new CategoryService();
+export default CategoryService;
