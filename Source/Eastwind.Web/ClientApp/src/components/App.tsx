@@ -10,19 +10,18 @@ import "../../node_modules/react-toastify/dist/ReactToastify.min.css";
 import { ToastContainer } from "react-toastify";
 
 function App() {
-  /*Only one route in a switch can match. Order of the delclaration is important*/
   return (
     <div className="container-fluid">
       <NavMenu />
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/products" component={ProductsPage} />
-        <Route path="/product/:id" component={ManageProductPage}/>
-        <Route path="/product/" component={ManageProductPage}/>
+        <Route path="/product/:id" component={ManageProductPage} />
+        <Route path="/product/" component={ManageProductPage} />
         <Route path="/about" component={AboutPage} />
         <Route component={PageNotFound} />
       </Switch>
-      <ToastContainer autoClose={3000} hideProgressBar/>
+      <ToastContainer autoClose={3000} hideProgressBar />
     </div>
   );
 }

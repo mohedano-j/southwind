@@ -1,79 +1,71 @@
 import React from "react";
-import { connect } from "react-redux";
-import * as productActions from "../../redux/actions/productActions";
-import * as categoryActions from "../../redux/actions/categoryActions";
-import { bindActionCreators } from "redux";
 import ProductList from "./ProductList";
 import { Redirect } from "react-router-dom";
 import Spinner from "../common/Spinner/Spinner";
 import { toast } from "react-toastify";
+import { CategoryService } from "../../services/categoryService";
+import { ProductService } from "../../services/productService";
+import { Category } from "../../category";
+import { Product } from "../../product";
+import { orderBy } from "lodash";
 
-type propsType = {
-  products: Array<any>;
-  categories: Array<any>;
-  categoryListLoad: any;
-  productListLoad: any;
-  productListSort: any;
-  productDelete: any;
-  loading: boolean;
-};
+type propsType = {};
 
 type stateType = {
-  products: Array<any>;
-  categories: Array<any>;
+  categoryService: CategoryService;
+  productService: ProductService;
+  loading: boolean;
+  categories: Category[];
+  products: Product[];
   clickedProduct: any;
   nextOrderAsc: string;
   modalIsOpen: boolean;
   fieldOrder: string;
   redirectToAddProductPage: boolean;
-  apiStatus: number;
 };
 
 class ProductsPage extends React.Component<propsType, stateType> {
   constructor(props: propsType) {
     super(props);
     this.state = {
+      categoryService: new CategoryService(),
+      productService: new ProductService(),
       products: [],
       categories: [],
+      loading: false,
       clickedProduct: {},
       nextOrderAsc: "asc",
       modalIsOpen: false,
       fieldOrder: "",
-      redirectToAddProductPage: false,
-      apiStatus: 0
+      redirectToAddProductPage: false
     };
   }
-  /*This will run every time after the component is mount */
-  componentDidMount() {
-    const {
-      products,
-      categories,
-      categoryListLoad,
-      productListLoad
-    } = this.props;
-    if (categories.length === 0) {
-      categoryListLoad().catch((error: any) => {
-        alert("Loading categories failed" + error);
-      });
-    }
 
-    if (products.length === 0) {
-      productListLoad().catch((error: any) => {
-        alert("Loading products failed" + error);
-      });
-    }
+  componentDidMount() {
+    const { categoryService, productService } = this.state;
+    this.setState({ loading: true });
+    categoryService.getAll().subscribe((categories: Category[]) => {
+      this.setState({ categories: categories, loading: false });
+    });
+    this.setState({ loading: true });
+    productService.getAll().subscribe((products: Product[]) => {
+      this.setState({ products: products, loading: false });
+    });
+  }
+
+  sortProducts(field: string, asc: boolean) {
+    const { products } = this.state;
+    const sortedProducts = orderBy(products, field, asc);
+    this.setState({ products: sortedProducts });
   }
 
   handleRequestSort = (clickedHeader: string) => {
-    const { productListSort } = this.props;
+    const { fieldOrder, nextOrderAsc } = this.state;
+    const asc = nextOrderAsc === "asc";
 
-    productListSort(
-      this.props.products,
-      clickedHeader,
-      this.state.nextOrderAsc
-    );
+    this.sortProducts(clickedHeader, asc);
 
-    if (this.state.fieldOrder === clickedHeader) {
+    if (fieldOrder === clickedHeader) {
       this.setState({
         nextOrderAsc: this.state.nextOrderAsc == "asc" ? "desc" : "asc"
       });
@@ -96,19 +88,31 @@ class ProductsPage extends React.Component<propsType, stateType> {
   handleDeleteProduct = () => {
     this.setState({ modalIsOpen: false });
 
-    const product = this.state.clickedProduct;
+    const { clickedProduct, productService } = this.state;
 
-    this.props.productDelete(product);
+    productService.delete(clickedProduct).subscribe((product: Product) => {
+      const { products } = this.state;
 
-    toast.success("Product deleted");
+      if (products === undefined) {
+        return new Error("Products is undefined");
+      }
+
+      const newProducts = products.filter(
+        (p: Product) => p.productId == product.productId
+      );
+      this.setState({ products: newProducts });
+      toast.success("Product deleted");
+    });
   };
 
   render() {
+    const { loading, products } = this.state;
+
     return (
       <>
         {this.state.redirectToAddProductPage && <Redirect to="/product" />}
-        <h2>Products {this.props.products.length}</h2>
-        {this.props.loading ? (
+        <h2>Products {products.length}</h2>
+        {loading ? (
           <Spinner />
         ) : (
           <>
@@ -120,7 +124,7 @@ class ProductsPage extends React.Component<propsType, stateType> {
               Add Product
             </button>
             <ProductList
-              products={this.props.products}
+              products={products}
               onRequestSort={this.handleRequestSort}
               onDeleteClick={this.handleDeleteSelected}
               onDeleteConfirm={this.handleDeleteProduct}
@@ -134,36 +138,4 @@ class ProductsPage extends React.Component<propsType, stateType> {
   }
 }
 
-function mapStateToProps(state: any) {
-  const categories = state.categories ? state.categories : [];
-  const products = state.products ? state.products : [];
-
-  const productsWithCat = products.map((product: any) => {
-    const category = categories.find(
-      (category: any) => category.categoryId === product.categoryId
-    );
-    const categoryName = category ? category.categoryName : "";
-    return {
-      ...product,
-      categoryName: categoryName,
-      category: category
-    };
-  });
-  return {
-    products: productsWithCat,
-    categories: categories,
-    loading: state.apiStatus > 0
-  };
-}
-
-const mapDispatchToProps = {
-  productListLoad: productActions.productListLoad,
-  productListSort: productActions.productListSort,
-  categoryListLoad: categoryActions.categoryListLoad,
-  productDelete: productActions.productDelete
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ProductsPage);
+export default ProductsPage;
